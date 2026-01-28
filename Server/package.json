@@ -4,7 +4,7 @@
     "description": "A modern website for diabetic patients with chatbot and tracking features",
     "main": "server.js",
     "scripts": {
-        "start": "node server.js",
+        "start": "node server1.js",
         "dev": "nodemon server.js"
     },
     "dependencies": {

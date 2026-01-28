@@ -1,8 +1,8 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, './.env') });
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { Configuration, OpenAIApi } = require('openai');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,7 +22,7 @@ app.post('/api/chat', async (req, res) => {
     try {
         const { message } = req.body;
         
-        const response = await openai.createChatCompletion({
+        const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
                 {
@@ -39,7 +39,7 @@ app.post('/api/chat', async (req, res) => {
         });
         
         res.json({
-            reply: response.data.choices[0].message.content
+            reply: completion.choices[0].message.content
         });
     } catch (error) {
         console.error('Error with OpenAI API:', error);
