@@ -42,6 +42,15 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('theme', 'light');
         }
     });
+
+    // Sign-up link
+    const signupLink = document.querySelector('a[href="signup.html"]');
+    if (signupLink) {
+        signupLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'signup.html';
+        });
+    }
     
     // Initialize all modules
     if (typeof initChatbot === 'function') initChatbot();

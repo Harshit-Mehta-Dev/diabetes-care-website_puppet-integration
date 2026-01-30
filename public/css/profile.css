@@ -1,0 +1,36 @@
+.profile-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.profile-header {
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 5px solid var(--primary-color);
+}
+
+#change-picture-btn {
+    background-color: var(--secondary-color);
+}
+
+.profile-info h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.profile-info p {
+    color: var(--text-light);
+}
