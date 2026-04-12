@@ -1,0 +1,6 @@
+node_modules/
+.env
+Server/.env
+.agents/
+.vscode/
+package-lock.json

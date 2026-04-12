@@ -52,6 +52,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Logo refresh animation
+    const logo = document.querySelector('.logo');
+    if (logo) {
+        logo.addEventListener('click', function() {
+            // Add animation class
+            this.classList.add('refresh-anim');
+            // Wait for the heartbeatSpin animation to finish before reloading
+            setTimeout(() => {
+                window.location.reload();
+            }, 800);
+        });
+    }
+    
     // Initialize all modules
     if (typeof initChatbot === 'function') initChatbot();
     if (typeof initProfile === 'function') initProfile();
