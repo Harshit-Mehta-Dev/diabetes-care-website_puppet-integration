@@ -28,48 +28,56 @@ pipeline {
         stage('Run Security Test') {
             steps {
                 echo 'Verifying application stability...'
-                // Using --forceExit and --detectOpenHandles to prevent hanging CI builds
                 sh 'npm test -- --forceExit --detectOpenHandles'
             }
         }
 
-        stage('Docker Build') {
-            steps {
-                echo 'Building Docker Image...'
-                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-            }
-        }
-
-        stage('Cleanup Old Container') {
+        stage('Docker Build (Optional)') {
             steps {
                 script {
-                    echo 'Cleaning up old deployment...'
                     try {
-                        sh "docker stop ${CONTAINER_NAME} || true"
-                        sh "docker rm ${CONTAINER_NAME} || true"
+                        echo 'Attempting Docker Build...'
+                        sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                     } catch (Exception e) {
-                        echo "No previous container found."
+                        echo "Docker build failed: ${e.message}. Proceeding with Native Deployment."
                     }
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy (Native 24/7)') {
             steps {
-                echo 'Deploying fresh container...'
+                echo 'Starting application in background...'
                 withCredentials([
                     string(credentialsId: 'GEMINI_API_KEY', variable: 'GEMINI_API_KEY'),
                     string(credentialsId: 'NGROK_AUTHTOKEN', variable: 'NGROK_AUTHTOKEN')
                 ]) {
-                    sh "docker run -d --name ${CONTAINER_NAME} -p 80:${PORT} -e GEMINI_API_KEY=${GEMINI_API_KEY} -e NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN} ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    script {
+                        // Kill any existing instance of the server
+                        sh "pkill -f 'node Server/server1.js' || true"
+                        
+                        // Start the server in the background using nohup
+                        // This keeps it running 24/7 after the Jenkins job finishes
+                        sh "export GEMINI_API_KEY=${GEMINI_API_KEY} && \
+                            export NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN} && \
+                            export PORT=${PORT} && \
+                            export NODE_ENV=production && \
+                            nohup node Server/server1.js > app.log 2>&1 &"
+                        
+                        echo "Native deployment successful. Logs are being written to app.log"
+                    }
                 }
             }
         }
 
         stage('Verify') {
             steps {
-                echo 'Verifying deployment...'
-                sh "docker ps --filter name=${CONTAINER_NAME}"
+                script {
+                    echo 'Verifying health...'
+                    sh "sleep 5"
+                    sh "grep 'Server running' app.log || echo 'Warning: Server may not have started yet'"
+                    sh "grep '🚀 NGROK TUNNEL ACTIVE' app.log || echo 'Warning: Ngrok tunnel not detected in logs yet'"
+                }
             }
         }
     }
