@@ -7,34 +7,32 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const statusMonitor = require('express-status-monitor');
 
+const ngrok = require('ngrok');
 const app = express();
 const PORT = process.env.PORT || 1012;
 
 // Middleware
-// Middleware
 app.use(statusMonitor()); // Adds performance monitoring at /status
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
-            fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
-            imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
-            connectSrc: ["'self'"]
-        }
-    }
-})); // Secures HTTP headers with strict CSP
 
-// Rate limiting
+// Request Logger for "Full Access" visibility
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - IP: ${req.ip}`);
+    next();
+});
+
+app.use(helmet({
+    contentSecurityPolicy: false // Disabled for 'Full Access' testing to prevent ngrok blocks
+}));
+
+// Rate limiting - Relaxed for Full Access Testing
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 200,
-    message: { error: 'Too many requests from this IP, please try again later.' }
+    max: 10000, // Effectively lifted
+    message: { error: 'Rate limit exceeded during testing.' }
 });
 app.use('/api/', limiter);
 
-app.use(cors());
+app.use(cors({ origin: '*', methods: ['GET', 'POST'], credentials: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
@@ -147,8 +145,23 @@ app.post('/api/ask-doctor', async (req, res) => {
 
 // Start server
 if (require.main === module) {
-    app.listen(PORT, () => {
+    app.listen(PORT, async () => {
         console.log(`Server running on http://localhost:${PORT}`);
+        
+        // Automated Ngrok Tunnel Initialization
+        if (process.env.NGROK_AUTHTOKEN) {
+            try {
+                await ngrok.authtoken(process.env.NGROK_AUTHTOKEN);
+                const url = await ngrok.connect(PORT);
+                console.log('---------------------------------------------------------');
+                console.log(`🚀 NGROK TUNNEL ACTIVE: ${url}`);
+                console.log('---------------------------------------------------------');
+            } catch (err) {
+                console.error('Error starting Ngrok tunnel:', err.message);
+            }
+        } else {
+            console.log('NOTICE: NGROK_AUTHTOKEN not found. Skipping tunnel initialization.');
+        }
     });
 }
 

@@ -1,11 +1,12 @@
 {
   "name": "diabetes-care-website",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "Server/server1.js",
   "scripts": {
     "test": "jest",
     "start": "node Server/server1.js",
-    "build": "echo 'No build step required for this project'"
+    "build": "echo 'No build step required for this project'",
+    "ngrok": "ngrok http 1012"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +22,8 @@
     "express-status-monitor": "^1.3.4",
     "helmet": "^8.1.0",
     "nodemailer": "^8.0.5",
-    "openai": "^4.91.1"
+    "openai": "^4.91.1",
+    "ngrok": "^5.0.0-beta.2"
   },
   "devDependencies": {
     "cross-env": "^10.1.0",

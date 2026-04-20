@@ -7,6 +7,7 @@ pipeline {
         CONTAINER_NAME = "diabetes-care-app"
         PORT = "1012"
         GEMINI_API_KEY = credentials('gemini-api-key')
+        NGROK_AUTHTOKEN = credentials('ngrok-auth-token')
         CI = "true"
     }
 
@@ -28,7 +29,7 @@ pipeline {
             steps {
                 echo 'Verifying application stability...'
                 // Using --forceExit and --detectOpenHandles to prevent hanging CI builds
-                sh 'npm test -- --forceExit --detectOpenHandles'
+                bat 'npm test -- --forceExit --detectOpenHandles'
             }
         }
 
@@ -56,8 +57,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying fresh container...'
-                withCredentials([string(credentialsId: 'GEMINI_API_KEY', variable: 'GEMINI_API_KEY')]) {
-                    bat "docker run -d --name ${CONTAINER_NAME} -p ${PORT}:${PORT} -e GEMINI_API_KEY=%GEMINI_API_KEY% ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                withCredentials([
+                    string(credentialsId: 'GEMINI_API_KEY', variable: 'GEMINI_API_KEY'),
+                    string(credentialsId: 'NGROK_AUTHTOKEN', variable: 'NGROK_AUTHTOKEN')
+                ]) {
+                    bat "docker run -d --name ${CONTAINER_NAME} -p 80:${PORT} -e GEMINI_API_KEY=%GEMINI_API_KEY% -e NGROK_AUTHTOKEN=%NGROK_AUTHTOKEN% ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
