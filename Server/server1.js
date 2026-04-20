@@ -14,8 +14,17 @@ const PORT = process.env.PORT || 1012;
 // Middleware
 app.use(statusMonitor()); // Adds performance monitoring at /status
 app.use(helmet({
-    contentSecurityPolicy: false, // Disabling CSP entirely to allow external scripts like Chart.js to load gracefully.
-})); // Secures HTTP headers
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
+            imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
+            connectSrc: ["'self'"]
+        }
+    }
+})); // Secures HTTP headers with strict CSP
 
 // Rate limiting
 const limiter = rateLimit({

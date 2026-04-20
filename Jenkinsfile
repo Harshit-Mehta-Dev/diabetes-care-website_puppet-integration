@@ -6,7 +6,7 @@ pipeline {
         DOCKER_TAG = "latest"
         CONTAINER_NAME = "diabetes-care-app"
         PORT = "1012"
-        GEMINI_API_KEY = "REDACTED_KEY"
+        GEMINI_API_KEY = credentials('gemini-api-key')
         CI = "true"
     }
 

@@ -4,20 +4,24 @@ FROM node:20-alpine
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package files first to leverage Docker layer caching
+# Copy package files first
 COPY package*.json ./
 
-# Install production dependencies only
+# Install production dependencies
 RUN npm install --production
 
-# Copy the server logic and public assets
+# Move source files and assets
 COPY Server ./Server
 COPY public ./public
 
-# Expose the application port (matching server1.js)
+# SECURITY: Set permissions and switch to non-root 'node' user
+RUN chown -R node:node /app
+USER node
+
+# Expose the application port
 EXPOSE 1012
 
-# Set environment to production
+# Environment configuration
 ENV NODE_ENV=production
 ENV PORT=1012
 
