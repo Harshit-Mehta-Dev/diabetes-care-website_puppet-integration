@@ -21,7 +21,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Node.js dependencies...'
-                bat 'npm install'
+                sh 'npm install'
             }
         }
 
@@ -29,14 +29,14 @@ pipeline {
             steps {
                 echo 'Verifying application stability...'
                 // Using --forceExit and --detectOpenHandles to prevent hanging CI builds
-                bat 'npm test -- --forceExit --detectOpenHandles'
+                sh 'npm test -- --forceExit --detectOpenHandles'
             }
         }
 
         stage('Docker Build') {
             steps {
                 echo 'Building Docker Image...'
-                bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
             }
         }
 
@@ -45,8 +45,8 @@ pipeline {
                 script {
                     echo 'Cleaning up old deployment...'
                     try {
-                        bat "docker stop ${CONTAINER_NAME}"
-                        bat "docker rm ${CONTAINER_NAME}"
+                        sh "docker stop ${CONTAINER_NAME} || true"
+                        sh "docker rm ${CONTAINER_NAME} || true"
                     } catch (Exception e) {
                         echo "No previous container found."
                     }
@@ -61,7 +61,7 @@ pipeline {
                     string(credentialsId: 'GEMINI_API_KEY', variable: 'GEMINI_API_KEY'),
                     string(credentialsId: 'NGROK_AUTHTOKEN', variable: 'NGROK_AUTHTOKEN')
                 ]) {
-                    bat "docker run -d --name ${CONTAINER_NAME} -p 80:${PORT} -e GEMINI_API_KEY=%GEMINI_API_KEY% -e NGROK_AUTHTOKEN=%NGROK_AUTHTOKEN% ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    sh "docker run -d --name ${CONTAINER_NAME} -p 80:${PORT} -e GEMINI_API_KEY=${GEMINI_API_KEY} -e NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN} ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
@@ -69,7 +69,7 @@ pipeline {
         stage('Verify') {
             steps {
                 echo 'Verifying deployment...'
-                bat "docker ps --filter name=${CONTAINER_NAME}"
+                sh "docker ps --filter name=${CONTAINER_NAME}"
             }
         }
     }
