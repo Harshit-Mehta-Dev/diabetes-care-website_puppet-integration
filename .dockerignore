@@ -1,10 +1,11 @@
 node_modules
 npm-debug.log
-.idx
+Server/node_modules
 .git
-.vscode
 .env
-firebase-debug.log
-vercel.json
+*.zip
+*.log
 Dockerfile
-k8s
+Jenkinsfile
+.vercel
+.idx

@@ -1,5 +1,5 @@
 {
-    "name": "diabetes-care-website",
+    "name": "diabetes-care-backend",
     "version": "1.0.0",
     "description": "A modern website for diabetic patients with chatbot and tracking features",
     "main": "server.js",

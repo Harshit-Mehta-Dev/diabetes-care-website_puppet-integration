@@ -26,8 +26,8 @@
             </nav>
             <div class="theme-toggle">
                 <i class="fas fa-moon"></i>
-                <label class="switch">
-                    <input type="checkbox" id="darkModeToggle">
+                <label class="switch" for="darkModeToggle">
+                    <input type="checkbox" id="darkModeToggle" aria-label="Toggle Dark Mode">
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -41,12 +41,10 @@
                 <h1 id="pro"></h1>
                 <div class="chatbot-container">
                     <div class="chatbot-header">
-                        <!--<img src="images/chatbot-avatar.png" alt="Chatbot Avatar" class="chatbot-avatar">-->
                         <div class="chatbot-avatar">
                             <i class="fas fa-heartbeat"></i>
                             <span>DiabetesCare</span>
                         </div>
-                        
                     </div>
                     <div class="chatbot-messages" id="chatbot-messages">
                         <div class="chatbot-message bot">
@@ -138,9 +136,7 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </section>
@@ -165,20 +161,19 @@
                     </div>
                     <div class="ask-history">
                         <h3>Your Previous Questions</h3>
-                        <div class="questions-list" id="questions-list">
-                    
-                        </div>
+                        <div class="questions-list" id="questions-list"></div>
                     </div>
                 </div>
             </section>
         </main>
     </div>
 
-   
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/chatbot.js"></script>
+    <script src="/js/profile.js"></script>
+    <script src="/js/tracker.js"></script>
+    <script src="/js/ask.js"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/js/main.js"></script>
-<script src="/js/chatbot.js"></script>
-<script src="/js/profile.js"></script>
-<script src="/js/tracker.js"></script>
 </html>

@@ -1,12 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
+function initAsk() {
     const askForm = document.getElementById('question-form');
     const questionsList = document.getElementById('questions-list');
 
-    // Load history from localStorage
+    if (!askForm || !questionsList) return;
+
     let savedQuestions = JSON.parse(localStorage.getItem('savedQuestions')) || [];
 
     function renderQuestions() {
-        if(!questionsList) return;
         questionsList.innerHTML = '';
         if (savedQuestions.length === 0) {
             questionsList.innerHTML = '<p style="color: var(--text-light); font-style: italic;">No questions submitted yet.</p>';
@@ -17,76 +17,69 @@ document.addEventListener('DOMContentLoaded', function() {
             const item = document.createElement('div');
             item.className = 'question-item';
             item.innerHTML = `
-                <div class="question-title"><span style="color:var(--danger-color); font-size:0.8em; font-weight:bold;">[${(q.priority || 'Routine').toUpperCase()}]</span> ${q.title}</div>
-                <div class="question-date">${new Date(q.date).toLocaleString()}</div>
-                <div class="question-status status-pending">Sent to Doctor</div>
+                <div class="question-title" style="font-weight: 600; color: var(--primary-color);">${q.title}</div>
+                <div class="question-date" style="font-size: 0.8rem; color: var(--text-light);">${new Date(q.date).toLocaleString()}</div>
+                <p style="font-size: 0.9rem; margin-top: 5px;">${q.details}</p>
+                <div style="margin-top: 5px; font-size: 0.8rem; color: var(--secondary-color);">Status: Sent to Doctor</div>
             `;
             questionsList.appendChild(item);
         });
     }
 
-    renderQuestions();
+    askForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-    if (askForm) {
-        askForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+        const titleEl = document.getElementById('question-title');
+        const detailsEl = document.getElementById('question-details');
+        const emailEl = document.getElementById('question-email');
+        const priorityEl = document.getElementById('question-priority');
 
-            const emailInput = document.getElementById('question-email');
-            const titleInput = document.getElementById('question-title');
-            const detailsInput = document.getElementById('question-details');
-            const priorityInput = document.getElementById('question-priority');
-            const submitBtn = askForm.querySelector('button[type="submit"]');
+        if (!titleEl || !detailsEl) return;
 
-            const email = emailInput ? emailInput.value : '';
-            const title = titleInput.value;
-            const details = detailsInput.value;
-            const priority = priorityInput ? priorityInput.value : 'routine';
+        const submitBtn = askForm.querySelector('button[type="submit"]');
 
-            // Simple validation
-            if (!title || !details || !email) {
-                alert('Please fill out all fields including your email.');
-                return;
-            }
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitBtn.disabled = true;
 
-            // UX update
-            const originalBtnText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitBtn.disabled = true;
+        try {
+            const response = await fetch('/api/ask-doctor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    title: titleEl.value, 
+                    details: detailsEl.value,
+                    email: emailEl ? emailEl.value : 'user@example.com',
+                    priority: priorityEl ? priorityEl.value : 'routine'
+                })
+            });
 
-            try {
-                const response = await fetch('/api/ask-doctor', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, title, details, priority })
+            if (response.ok) {
+                savedQuestions.unshift({ 
+                    title: titleEl.value, 
+                    details: detailsEl.value, 
+                    date: new Date().toISOString() 
                 });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    // Update history locally
-                    savedQuestions.unshift({ title, details, priority, date: new Date().toISOString() });
-                    localStorage.setItem('savedQuestions', JSON.stringify(savedQuestions));
-                    renderQuestions();
-
-                    // Success Feedback
-                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent Successfully!';
-                    submitBtn.style.backgroundColor = 'var(--secondary-color)';
-                    askForm.reset();
-                } else {
-                    alert('Error: ' + (result.error || 'Failed to send question'));
-                    submitBtn.innerHTML = originalBtnText;
-                }
-            } catch (error) {
-                console.error('Error submitting question:', error);
-                alert('Network error. Please try again later.');
-                submitBtn.innerHTML = originalBtnText;
-            } finally {
-                setTimeout(() => {
-                    submitBtn.innerHTML = originalBtnText;
-                    submitBtn.disabled = false;
-                    submitBtn.style.backgroundColor = '';
-                }, 3000);
+                localStorage.setItem('savedQuestions', JSON.stringify(savedQuestions));
+                renderQuestions();
+                askForm.reset();
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
             }
-        });
-    }
-});
+        } catch (error) {
+            console.error('Error submitting question:', error);
+            // Fallback
+            savedQuestions.unshift({ title: titleEl.value, details: detailsEl.value, date: new Date().toISOString() });
+            localStorage.setItem('savedQuestions', JSON.stringify(savedQuestions));
+            renderQuestions();
+            askForm.reset();
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Saved Local';
+        } finally {
+            setTimeout(() => {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }, 3000);
+        }
+    });
+
+    renderQuestions();
+}

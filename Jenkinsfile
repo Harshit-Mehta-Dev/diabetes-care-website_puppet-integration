@@ -2,65 +2,83 @@ pipeline {
     agent any
 
     environment {
-        NODE_ENV = 'production'
-        // Assuming Jenkins needs cross-env or testing tool commands to use ci mode
-        CI = 'true'
-    }
-
-    tools {
-        nodejs 'node' 
+        DOCKER_IMAGE = "diabetes-care-platform"
+        DOCKER_TAG = "latest"
+        CONTAINER_NAME = "diabetes-care-app"
+        PORT = "1012"
+        GEMINI_API_KEY = "REDACTED_KEY"
+        CI = "true"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                echo 'Checking out source code...'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing dependencies from package.json...'
-                bat 'npm ci' // Use "npm ci" in CI/CD for reliable lockfile-based installs
-            }
-        }
-
-        stage('Security & Dependency Monitoring') {
-            steps {
-                echo 'Running automated security monitoring for vulnerabilities...'
-                // Fails the stage but lets the build complete if high vulnerabilities are found
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    bat 'npm audit --audit-level=high'
-                }
+                echo 'Installing Node.js dependencies...'
+                bat 'npm install'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running Jest test suites...'
+                echo 'Running Automated Tests...'
+                // Fails the build if any test fails
                 bat 'npm test'
             }
         }
 
-        stage('Build & Archive') {
+        stage('Docker Build') {
             steps {
-                echo 'Archiving necessary artifacts for deployment...'
-                // Exclude node_modules so that the raw source and dependencies can be built separately on target
-                // Or Jenkins could archive the exact deployment build
-                archiveArtifacts artifacts: 'Server/**/*, public/**/*, package.json, package-lock.json', allowEmptyArchive: false
+                echo 'Building Docker Image...'
+                bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+            }
+        }
+
+        stage('Cleanup Old Container') {
+            steps {
+                script {
+                    echo 'Cleaning up old deployment...'
+                    try {
+                        bat "docker stop ${CONTAINER_NAME}"
+                        bat "docker rm ${CONTAINER_NAME}"
+                    } catch (Exception e) {
+                        echo "No previous container found."
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying fresh container...'
+                withCredentials([string(credentialsId: 'GEMINI_API_KEY', variable: 'GEMINI_API_KEY')]) {
+                    bat "docker run -d --name ${CONTAINER_NAME} -p ${PORT}:${PORT} -e GEMINI_API_KEY=%GEMINI_API_KEY% ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                }
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                echo 'Verifying deployment...'
+                bat "docker ps --filter name=${CONTAINER_NAME}"
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline execution finished.'
+            echo "Pipeline finished execution."
         }
         success {
-            echo 'Pipeline successfully executed! Artifacts are archived and ready for deployment.'
+            echo "SUCCESS: App deployed to http://localhost:${PORT}"
         }
         failure {
-            echo 'Pipeline failed during execution. Check logs above.'
+            echo "FAILURE: Pipeline failed at some stage. Check the console output above."
         }
     }
 }

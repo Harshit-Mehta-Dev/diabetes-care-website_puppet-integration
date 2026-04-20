@@ -26,8 +26,8 @@
             </nav>
             <div class="theme-toggle">
                 <i class="fas fa-moon"></i>
-                <label class="switch">
-                    <input type="checkbox" id="darkModeToggle">
+                <label class="switch" for="darkModeToggle">
+                    <input type="checkbox" id="darkModeToggle" aria-label="Toggle Dark Mode">
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -62,165 +62,80 @@
 
             <!-- Profile Page -->
             <section id="profile" class="page">
-                <h1>Manage Profiles</h1>
-                <div class="profile-container" style="display: flex; flex-direction: column; gap: 30px;">
-                    <div class="profile-card glass-panel" style="margin: 0; width: 100%; display: flex; flex-wrap: wrap; gap: 20px;">
-                        <div class="profile-avatar-section" style="flex: 1; min-width: 200px; text-align: center; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                            <div class="avatar-circle">
-                                <i class="fas fa-user-md" style="font-size: 5rem; color: var(--primary-color);"></i>
-                            </div>
-                            <h3 style="margin-top:15px; color:var(--text-color);">Create Profile</h3>
+                <h1>Your Profile</h1>
+                <div class="profile-card">
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" required>
                         </div>
-                        <div style="flex: 2; min-width: 300px;">
-                            <form id="profile-form" novalidate>
-                                <div class="form-row" style="display:flex; gap:15px; flex-wrap:wrap;">
-                                    <div class="form-group" style="flex:1; min-width:200px;">
-                                        <label for="name">Full Name</label>
-                                        <input type="text" id="name" required placeholder="John Doe">
-                                    </div>
-                                    <div class="form-group" style="flex:1; min-width:100px;">
-                                        <label for="age">Age</label>
-                                        <input type="number" id="age" required placeholder="35">
-                                    </div>
-                                </div>
-                                <div class="form-row" style="display:flex; gap:15px; flex-wrap:wrap;">
-                                    <div class="form-group" style="flex:1; min-width:150px;">
-                                        <label for="gender">Gender</label>
-                                        <select id="gender" required>
-                                            <option value="">Select</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="flex:1; min-width:150px;">
-                                        <label for="diabetes-type">Diabetes Type</label>
-                                        <select id="diabetes-type" required>
-                                            <option value="">Select</option>
-                                            <option value="Type 1">Type 1</option>
-                                            <option value="Type 2">Type 2</option>
-                                            <option value="Pre-diabetes">Pre-diabetes</option>
-                                            <option value="Gestational">Gestational</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-row" style="display:flex; gap:15px; flex-wrap:wrap;">
-                                    <div class="form-group" style="flex:1; min-width:100px;">
-                                        <label for="height">Height (cm)</label>
-                                        <input type="number" id="height" placeholder="175">
-                                    </div>
-                                    <div class="form-group" style="flex:1; min-width:100px;">
-                                        <label for="weight">Weight (kg)</label>
-                                        <input type="number" id="weight" placeholder="70">
-                                    </div>
-                                    <div class="form-group" style="flex:1; min-width:100px;">
-                                        <label for="bmi-display">BMI (Auto-calc)</label>
-                                        <input type="text" id="bmi-display" readonly style="background-color:var(--light-color); color:var(--primary-color); font-weight:bold;">
-                                    </div>
-                                </div>
-                                <div class="form-row" style="display:flex; gap:15px; flex-wrap:wrap;">
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="medications">Current Medications</label>
-                                        <textarea id="medications" rows="2" placeholder="Insulin, Metformin, etc."></textarea>
-                                    </div>
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="next-checkup">Next Doctor Appointment</label>
-                                        <input type="date" id="next-checkup">
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn pulse-btn" style="width: 100%;"><i class="fas fa-save"></i> Save Profile</button>
-                            </form>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" required>
                         </div>
-                    </div>
-
-                    <!-- Previous Profiles Collection Section -->
-                    <div class="saved-profiles-section" style="width: 100%;">
-                        <h2>Saved Profiles</h2>
-                        <div id="profiles-collection" class="profiles-grid">
-                            <!-- Dynamically populated animated profile cards will go here -->
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" required>
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label for="diabetes-type">Diabetes Type</label>
+                            <select id="diabetes-type" required>
+                                <option value="">Select</option>
+                                <option value="type1">Type 1</option>
+                                <option value="type2">Type 2</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="medications">Current Medications</label>
+                            <textarea id="medications" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn">Save Profile</button>
+                    </form>
                 </div>
             </section>
 
             <!-- Sugar Tracker Page -->
             <section id="tracker" class="page">
                 <h1>Sugar Level Tracker</h1>
-                
-                <!-- New Statistical Widgets -->
-                <div class="stats-container" style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <div class="glass-panel stat-card" style="flex: 1; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: center; min-width: 150px;">
-                        <h4 style="color: var(--text-light); margin-bottom: 5px;">7-Day Average</h4>
-                        <div id="stat-avg" style="font-size: 2.5rem; font-weight: bold; color: var(--primary-color);">--</div>
-                        <span style="font-size: 0.9rem; color: var(--text-light);">mg/dL</span>
-                    </div>
-                    <div class="glass-panel stat-card" style="flex: 1; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: center; min-width: 150px;">
-                        <h4 style="color: var(--text-light); margin-bottom: 5px;">Estimated A1C</h4>
-                        <div id="stat-a1c" style="font-size: 2.5rem; font-weight: bold; color: var(--secondary-color);">--</div>
-                        <span style="font-size: 0.9rem; color: var(--text-light);">%</span>
-                    </div>
-                </div>
-
                 <div class="tracker-container">
-                    <div class="tracker-form glass-panel">
+                    <div class="tracker-form">
                         <h3>Add New Reading</h3>
-                        <form id="sugar-form" novalidate>
-                            <div class="form-row" style="display:flex; gap:15px; flex-wrap:wrap;">
-                                <div class="form-group" style="flex:1;">
-                                    <label for="reading-time">Time of Day</label>
-                                    <select id="reading-time" required>
-                                        <option value="">Select Time</option>
-                                        <option value="morning">Morning</option>
-                                        <option value="afternoon">Afternoon</option>
-                                        <option value="night">Night</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" style="flex:1;">
-                                    <label for="reading-meal">Meal Context</label>
-                                    <select id="reading-meal" required>
-                                        <option value="">Select Context</option>
-                                        <option value="Fasting">Fasting (Pre-breakfast)</option>
-                                        <option value="Before Meal">Before Meal</option>
-                                        <option value="After Meal">2 hrs After Meal</option>
-                                        <option value="Random">Random / Bedtime</option>
-                                    </select>
-                                </div>
+                        <form id="sugar-form">
+                            <div class="form-group">
+                                <label for="reading-time">Time of Day</label>
+                                <select id="reading-time" required>
+                                    <option value="">Select</option>
+                                    <option value="morning">Morning</option>
+                                    <option value="afternoon">Afternoon</option>
+                                    <option value="night">Night</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="sugar-level">Sugar Level (mg/dL)</label>
-                                <input type="number" id="sugar-level" required placeholder="e.g. 105">
+                                <input type="number" id="sugar-level" required>
                             </div>
-                            <button type="submit" class="btn btn-primary pulse-btn" style="width: 100%;"><i class="fas fa-plus"></i> Add Reading</button>
+                            <button type="submit" class="btn">Add Reading</button>
                         </form>
                     </div>
-                    
-                    <div class="tracker-graph glass-panel" style="position: relative; min-height: 300px;">
+                    <div class="tracker-graph">
                         <h3>Your Sugar Levels</h3>
-                        
-                        <!-- Empty State Placeholder -->
-                        <div id="chart-empty-state" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 80%; display: none;">
-                            <i class="fas fa-chart-line" style="font-size: 4rem; color: var(--gray); opacity: 0.5; margin-bottom: 15px;"></i>
-                            <h4 style="color: var(--text-light);">No Readings Yet</h4>
-                            <p style="font-size: 0.9rem; color: var(--text-light);">Start logging your sugar levels to generate your beautiful visual trends and A1C estimates!</p>
-                        </div>
-
-                        <!-- Data Canvas -->
-                        <div style="position: relative; height: 300px; width: 100%;">
-                            <canvas id="sugar-chart" style="display: none;"></canvas>
-                        </div>
+                        <canvas id="sugar-chart"></canvas>
                     </div>
                 </div>
-
-                <div class="tracker-history glass-panel" style="margin-top: 20px;">
+                <div class="tracker-history">
                     <h3>Recent Readings</h3>
                     <table id="readings-table">
                         <thead>
                             <tr>
-                                <th>Date/Time</th>
-                                <th>Context</th>
+                                <th>Date</th>
+                                <th>Time</th>
                                 <th>Reading</th>
                                 <th>Status</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -234,39 +149,21 @@
             <section id="ask" class="page">
                 <h1>Ask a Doctor</h1>
                 <div class="ask-container">
-                    <div class="ask-form glass-panel">
+                    <div class="ask-form">
                         <h3>Submit Your Question</h3>
-                        <form id="question-form" novalidate>
+                        <form id="question-form">
                             <div class="form-group">
-                                <label for="question-email">Your Email</label>
-                                <input type="email" id="question-email" required placeholder="doctor@example.com">
-                            </div>
-                            <div class="form-row" style="display:flex; gap:15px; flex-wrap:wrap;">
-                                <div class="form-group" style="flex:2; min-width:150px;">
-                                    <label for="question-title">Subject</label>
-                                    <input type="text" id="question-title" required placeholder="Describe your concern...">
-                                </div>
-                                <div class="form-group" style="flex:1; min-width:100px;">
-                                    <label for="question-priority">Urgency</label>
-                                    <select id="question-priority" required>
-                                        <option value="routine">Routine</option>
-                                        <option value="important">Important</option>
-                                        <option value="urgent" style="color:var(--danger-color); font-weight:bold;">URGENT</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="question-attachment">Attach Report <span style="font-size:0.8rem;color:var(--text-light)">(Optional)</span></label>
-                                <input type="file" id="question-attachment" accept=".pdf,image/*">
+                                <label for="question-title">Subject</label>
+                                <input type="text" id="question-title" required>
                             </div>
                             <div class="form-group">
                                 <label for="question-details">Details</label>
-                                <textarea id="question-details" rows="5" required placeholder="Give us the details of your symptoms or question here..."></textarea>
+                                <textarea id="question-details" rows="5" required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary pulse-btn" style="width: 100%;"><i class="fas fa-paper-plane"></i> Send to Doctor</button>
+                            <button type="submit" class="btn">Submit Question</button>
                         </form>
                     </div>
-                    <div class="ask-history glass-panel">
+                    <div class="ask-history">
                         <h3>Your Previous Questions</h3>
                         <div class="questions-list" id="questions-list">
                     
@@ -278,11 +175,11 @@
     </div>
 
    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/js/main.js"></script>
-    <script src="/js/chatbot.js"></script>
-    <script src="/js/profile.js"></script>
-    <script src="/js/tracker.js"></script>
-    <script src="/js/ask.js"></script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/chatbot.js"></script>
+<script src="/js/profile.js"></script>
+<script src="/js/tracker.js"></script>
+<script src="/js/ask.js"></script>
 </html>
