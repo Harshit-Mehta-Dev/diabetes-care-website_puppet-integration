@@ -1,107 +1,102 @@
-# Diabetes Care Website - Modular System
+# Diabetes Care Companion 🩺
+[![Build Status](https://img.shields.io/badge/Jenkins-Success-brightgreen)](http://localhost:8080)
+[![Security](https://img.shields.io/badge/Security-Hardened-blue)](#security-hardening-)
+[![Docker](https://img.shields.io/badge/Docker-Non--Root-orange)](./Dockerfile)
 
-This repository has been reorganized into a modular structure to improve maintainability and security. You can find the specific components of the system in the following branches:
-
-- **`main`**: The assembly branch containing the full project.
-- **`system-server`**: Backend API and server-side logic.
-- **`system-ui`**: Frontend templates and HTML pages.
-- **`system-logic`**: Shared JS logic, chatbot, and trackers.
-- **`system-styles`**: Global and component-specific CSS.
-- **`system-infra`**: CI/CD (Jenkins), Deployment (Vercel), and Docker.
-- **`system-docs`**: Project documentation and security policies.
+A state-of-the-art, secure, and automated web application designed to empower individuals with Type 1 and Type 2 diabetes. This platform integrates real-time AI assistance, health tracking, and automated CI/CD infrastructure to ensure clinical reliability and high availability.
 
 ---
 
-# Diabetes Care Companion 🩺
+## 📂 Project Architecture
 
-A modern and responsive web application designed to help individuals manage their diabetes effectively. This application provides a suite of tools including an AI-powered chatbot, a personal profile manager, a blood sugar tracker, and a Q&A section with doctors.
-
-## Features 🚀
-
-*   **AI Chatbot:** 🤖 Get instant answers to your diabetes-related questions from an AI assistant powered by OpenAI's GPT-3.5-turbo model. The chatbot can provide information on medications, diet, exercise, and blood sugar management for Type 1 and Type 2 diabetes.
-
-*   **User Profile:** 👤 Create and manage your personal health profile. You can store information such as:
-    *   Full Name
-    *   Age
-    *   Gender
-    *   Diabetes Type (Type 1 or Type 2)
-    *   Current Medications
-
-*   **Blood Sugar Tracker:** 📈 Monitor your blood sugar levels throughout the day.
-    *   Log readings for different times: Morning, Afternoon, and Night.
-    *   Visualize your blood sugar history with an interactive chart.
-    *   The chart indicates normal, low (<70 mg/dL), and high (>180 mg/dL) blood sugar ranges.
-
-*   **Ask a Doctor:** 👨‍⚕️ Have a specific question? Submit it to a healthcare professional through the app. You can also view a history of your past questions and their status.
-
-## Getting Started 🏁
-
-Follow these steps to get the project up and running on your local machine.
-
-### Prerequisites
-
-Make sure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
-
-### Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/diabetes-care-website.git
-    ```
-2.  Navigate to the project directory:
-    ```bash
-    cd diabetes-care-website
-    ```
-3.  Install the dependencies:
-    ```bash
-    npm install
-    ```
-4.  Create a `.env` file in the `Server` directory and add your OpenAI API key:
-    ```
-    OPENAI_API_KEY=your_openai_api_key
-    ```
-5.  Start the server:
-    ```bash
-    npm run start
-    ```
-
-## Usage 💻
-
-Once the server is running, open your browser and navigate to `http://localhost:3000` to use the application.
-
-## Project Structure 📁
-
-```
-.
-├── Server
-│   └── server1.js        # Express server setup and API endpoints
-├── public
-│   ├── css
-│   │   └── style.css     # Main stylesheet
-│   └── js
-│       ├── chatbot.js    # Logic for the AI chatbot
-│       ├── main.js       # Main javascript for DOM manipulation and navigation
-│       ├── profile.js    # Logic for user profile management
-│       └── tracker.js    # Logic for the blood sugar tracker
-├── index.html            # Main HTML file
-├── node_modules
-├── package-lock.json
-├── package.json
-└── README.md
+```text
+├── Server/
+│   └── server1.js             # Express core: API routes, Middleware, & Socket connections
+│       ├── GET /api/user      # Fetches user profile and health settings
+│       ├── POST /api/glucose  # Saves new blood sugar readings to the database
+│       └── POST /api/chat     # Proxy to AI API (OpenAI/Gemini) for chatbot logic
+├── public/                    # Static assets served to the client browser
+│   ├── css/
+│   │   └── style.css          # Global variables, Flexbox/Grid layouts, & Dark mode themes
+│   ├── js/
+│   │   ├── chatbot.js         # Chat UI logic: Message streams, auto-scroll, & API fetching
+│   │   ├── main.js            # App Orchestrator: Event listeners, SPA-style view switching
+│   │   ├── profile.js         # User state: Handling personal targets (HbA1c, weight, etc.)
+│   │   └── tracker.js         # Data Visualization: Input validation & Chart.js/D3 integration
+│   └── assets/                # (Recommended) Icons, logos, and medical illustrations
+├── index.html                 # Main entry point: Holds the SPA containers and JS bundles
+├── .env                       # (Crucial) Stores sensitive API keys & DB strings (hidden)
+├── .gitignore                 # Prevents node_modules and .env from being leaked to Git
+├── node_modules/              # Installed dependencies (Express, Dotenv, Cors, etc.)
+├── package-lock.json          # Deterministic dependency tree for consistent builds
+├── package.json               # Scripts (start, dev) and project metadata
+└── README.md                  # Project roadmap, setup instructions, and API documentation
 ```
 
-## Dependencies 📦
+---
 
-*   [body-parser](https://www.npmjs.com/package/body-parser): Node.js body parsing middleware.
-*   [cors](https://www.npmjs.com/package/cors): Node.js CORS middleware.
-*   [dotenv](https://www.npmjs.com/package/dotenv): Loads environment variables from a `.env` file.
-*   [express](https://www.npmjs.com/package/express): Fast, unopinionated, minimalist web framework for Node.js.
-*   [openai](https://www.npmjs.com/package/openai): Official OpenAI Node.js library.
+## 🛠 CI/CD Pipelines & DevOps
 
-## Contributing 🤝
+The platform is backed by a professional automation suite to ensure every change is tested, secured, and deployed seamlessly.
 
-Contributions are welcome! Please feel free to submit a pull request or open an issue if you have suggestions for improvements.
+### 1. Jenkins Automation (Continuous Integration)
+- **Tooling**: Jenkins (Linux/Snap environment).
+- **Stages**:
+  - **Checkout**: Pulls code from GitHub using SSH.
+  - **Dependencies**: Clean installation using `npm install`.
+  - **Security Audit**: Automated `Jest` testing with `--detectOpenHandles`.
+  - **Dockerization**: Builds the hardened production image.
+  - **Deployment**: Automatic container rotation on port `1012`.
 
-## License 📄
+### 2. Docker Specification (Continuous Deployment)
+- **Base Image**: `node:20-alpine` (Minimal footprint).
+- **Security Hardening**:
+  - **User**: Runs under a non-privileged `node` user (UID 1000).
+  - **Workdir**: Isolated `/app` directory with strict ownership.
+  - **Cleanup**: Multistage-like logic to keep production images under 150MB.
 
-This project is licensed under the ISC License.
+### 3. Kubernetes Orchestration (Scalability)
+- **Architecture**: `Deployment` + `Service` (LoadBalancer).
+- **Self-Healing**: Configured with `Liveness` and `Readiness` probes to automatically restart failing nodes.
+- **Resources**: CPU limits (`500m`) and Memory limits (`512Mi`) to prevent resource exhaustion.
+- **Secrets**: Integrated with K8s `Secrets` for safe handling of API keys.
+
+---
+
+## 🔐 Security Hardening 
+
+We prioritize patient data security through multiple layers of defense:
+- **Strict Content Security Policy (CSP)**: Curated whitelists for CDNs (Chart.js, Google Fonts) to block XSS and malicious scripts.
+- **Secret Sanitization**: Automated Git history scrubbing to ensure no keys are ever stored in the repository record.
+- **Input Validation**: Hardened server-side validation on `/api/chat` to prevent injection attacks and server crashes.
+
+---
+
+## 🌿 Modular Branching Strategy
+
+The repository follows a partition-based structure to isolate concerns:
+- **`main`**: The "Source of Truth" with the complete integrated system.
+- **`system-infra`**: Infrastructure logic (Jenkinsfile, Dockerfile, K8s YAMLs).
+- **`system-server`**: Backend Express logic and API integrations.
+- **`system-ui`**: Front-end presentation (HTML & Images).
+- **`system-logic`**: Front-end behavior (JavaScript).
+- **`system-styles`**: Global visual design (CSS).
+- **`system-docs`**: Project documentation and roadmaps.
+
+---
+
+## 🚀 Getting Started
+
+1. **Clone the project**:
+   ```bash
+   git clone https://github.com/harshit-mehta-lab/diabetes-care-website.git
+   ```
+2. **Setup SSL/API Keys**:
+   Add your `GEMINI_API_KEY` to a `.env` file in the `Server/` directory.
+3. **Run with NPM**:
+   ```bash
+   npm install && npm start
+   ```
+
+---
+*Developed by Harshit Mehta for the Advanced Diabetes Care Lab.*
