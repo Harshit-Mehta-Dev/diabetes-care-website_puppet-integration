@@ -14,9 +14,12 @@ spec:
       labels:
         app: diabetes-care
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
       containers:
-      - name: app
-        image: gcr.io/[PROJECT_ID]/diabetes-care-app:latest
+      - name: diabetes-care-app
+        image: diabetes-care-platform:latest
         ports:
         - containerPort: 1012
         env:
@@ -25,12 +28,24 @@ spec:
         - name: GEMINI_API_KEY
           valueFrom:
             secretKeyRef:
-              name: diabetes-care-secrets
+              name: api-secrets
               key: gemini-api-key
         resources:
           limits:
             cpu: "500m"
             memory: "512Mi"
           requests:
-            cpu: "200m"
+            cpu: "250m"
             memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: 1012
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /status
+            port: 1012
+          initialDelaySeconds: 15
+          periodSeconds: 5
