@@ -11,34 +11,46 @@ const app = express();
 const PORT = process.env.PORT || 1012;
 
 // Middleware
+// Middleware
 app.use(statusMonitor()); // Adds performance monitoring at /status
 app.use(helmet({
     contentSecurityPolicy: false, // Disabling CSP entirely to allow external scripts like Chart.js to load gracefully.
 })); // Secures HTTP headers
 
-// Rate limiting to prevent basic DDoS and brute-force attacks
+// Rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes restricts
-    max: 200, // 200 requests per IP
+    windowMs: 15 * 60 * 1000,
+    max: 200,
     message: { error: 'Too many requests from this IP, please try again later.' }
 });
-app.use('/api/', limiter); // Apply rate limiter mostly to APIs
+app.use('/api/', limiter);
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
+
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Check for API Key presence
+if (!process.env.GEMINI_API_KEY) {
+    console.error('CRITICAL: GEMINI_API_KEY is not defined in the environment variables.');
+}
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'MISSING_KEY');
 
 // Streaming Chatbot API Endpoint for instant responses
 app.post('/api/chat/stream', async (req, res) => {
     try {
         const { message } = req.body;
         
-        // Using the ultra-fast gemini flash model
+        if (!process.env.GEMINI_API_KEY) {
+            throw new Error('Gemini API Key is missing. Please configure it in your Vercel settings.');
+        }
+
+        // Using the ultra-stable gemini-1.5-flash model
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-flash-latest",
-            systemInstruction: "You are an expert Diabetes Care & General Health Assistant. Your goal is to provide CRISP, CLEAR, and highly functional answers.\n\n" +
+            model: "gemini-1.5-flash",
+            systemInstruction: "You are an expert Diabetes Care & General Health Assistant."
                              "RULES:\n" +
                              "1. For diabetes topics (Type 1, Type 2, diet, meds, exercise): provide comprehensive, fully capable advice structured logically.\n" +
                              "2. For ALL OTHER topics: provide helpful, precise, and polite answers.\n" +
