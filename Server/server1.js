@@ -50,13 +50,13 @@ app.post('/api/chat/stream', async (req, res) => {
         // Using the ultra-stable gemini-1.5-flash model
         const model = genAI.getGenerativeModel({ 
             model: "gemini-1.5-flash",
-            systemInstruction: "You are an expert Diabetes Care & General Health Assistant."
+            systemInstruction: "You are an expert Diabetes Care & General Health Assistant. " +
                              "RULES:\n" +
                              "1. For diabetes topics (Type 1, Type 2, diet, meds, exercise): provide comprehensive, fully capable advice structured logically.\n" +
                              "2. For ALL OTHER topics: provide helpful, precise, and polite answers.\n" +
                              "3. Structure: Use plain text numbers and simple line breaks. Make it easy to read.\n" +
                              "4. Limit verbosity: Get straight to the point. Give the user exactly what they searched for.\n" +
-                             "5. ALWAYS include a brief 1-sentence disclaimer to consult a doctor for medical advice at the end."
+"5. ALWAYS include a brief 1-sentence disclaimer to consult a doctor for medical advice at the end."
         });
 
         // Set headers for SSE streaming
