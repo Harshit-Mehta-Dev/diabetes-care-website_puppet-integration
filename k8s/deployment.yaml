@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diabetes-care-app
+  labels:
+    app: diabetes-care
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: diabetes-care
+  template:
+    metadata:
+      labels:
+        app: diabetes-care
+    spec:
+      containers:
+      - name: app
+        image: gcr.io/[PROJECT_ID]/diabetes-care-app:latest
+        ports:
+        - containerPort: 1012
+        env:
+        - name: PORT
+          value: "1012"
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: diabetes-care-secrets
+              key: gemini-api-key
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"

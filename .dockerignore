@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+.idx
+.git
+.vscode
+.env
+firebase-debug.log
+vercel.json
+Dockerfile
+k8s
