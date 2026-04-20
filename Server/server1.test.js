@@ -1,5 +1,17 @@
 const request = require('supertest');
-const app = require('./server1'); // Import the express app
+const app = require('./server1');
+
+let server;
+
+beforeAll((done) => {
+    // Start server on a random port for testing to avoid collisions
+    server = app.listen(0, () => done());
+});
+
+afterAll((done) => {
+    // Explicitly close the server to prevent Jest from hanging
+    server.close(done);
+});
 
 describe('Diabetes Care API Endpoints', () => {
     // 1. Test for the "Ask Doctor" endpoint

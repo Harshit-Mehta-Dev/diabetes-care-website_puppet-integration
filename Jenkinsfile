@@ -24,11 +24,11 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Run Security Test') {
             steps {
-                echo 'Running Automated Tests...'
-                // Fails the build if any test fails
-                bat 'npm test'
+                echo 'Verifying application stability...'
+                // Using --forceExit and --detectOpenHandles to prevent hanging CI builds
+                sh 'npm test -- --forceExit --detectOpenHandles'
             }
         }
 

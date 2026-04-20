@@ -43,6 +43,10 @@ app.post('/api/chat/stream', async (req, res) => {
     try {
         const { message } = req.body;
         
+        if (!message) {
+            return res.status(400).json({ error: 'Message is required for chat.' });
+        }
+        
         if (!process.env.GEMINI_API_KEY) {
             throw new Error('Gemini API Key is missing. Please configure it in your Vercel settings.');
         }
