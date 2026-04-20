@@ -1,3 +1,17 @@
+# Diabetes Care Website - Modular System
+
+This repository has been reorganized into a modular structure to improve maintainability and security. You can find the specific components of the system in the following branches:
+
+- **`main`**: The assembly branch containing the full project.
+- **`system-server`**: Backend API and server-side logic.
+- **`system-ui`**: Frontend templates and HTML pages.
+- **`system-logic`**: Shared JS logic, chatbot, and trackers.
+- **`system-styles`**: Global and component-specific CSS.
+- **`system-infra`**: CI/CD (Jenkins), Deployment (Vercel), and Docker.
+- **`system-docs`**: Project documentation and security policies.
+
+---
+
 # Diabetes Care Companion 🩺
 
 A modern and responsive web application designed to help individuals manage their diabetes effectively. This application provides a suite of tools including an AI-powered chatbot, a personal profile manager, a blood sugar tracker, and a Q&A section with doctors.
