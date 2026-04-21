@@ -3,9 +3,31 @@
 [![Security](https://img.shields.io/badge/Security-Hardened-blue)](#security-hardening-)
 [![Docker](https://img.shields.io/badge/Docker-Non--Root-orange)](./Dockerfile)
 
-A state-of-the-art, secure, and automated web application designed to empower individuals with Type 1 and Type 2 diabetes. This platform integrates real-time AI assistance, health tracking, and automated CI/CD infrastructure to ensure clinical reliability and high availability.
+The Diabetes Care Companion is a modern, responsive Single Page Application (SPA) designed to facilitate effective chronic disease management. By integrating a React.js frontend with a Node.js backend, the platform provides users with essential tools such as an AI-powered chatbot, blood glucose tracking, and direct communication with healthcare professionals.
+To address the common healthcare industry challenges of application downtime and inconsistent deployment environments, the project implements a robust DevOps framework. Utilizing Docker for containerization and Jenkins and GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD), the project automates the software delivery lifecycle. This ensures that the application remains functional, consistent, and highly available across all stages of development and production.
 
 ---
+## Functional Overview: Diabetes Management Tools
+
+The platform focuses on simplicity and accessibility to support healthier lifestyles through meaningful health insights.
+---
+
+### 🩸 Blood Glucose Tracking and Interpretation
+The **Blood Sugar Tracker** is a central feature that allows users to monitor their glucose levels throughout the day.
+
+* **Logging Readings:** Users can log readings for three specific contexts: **Morning, Afternoon, and Night**.
+* **Visual Status Indicators:** The application generates interactive charts and visual trends to help users interpret their data.
+* **Range Interpretation:**
+    * **Low:** Readings below **70 mg/dL**.
+    * **Normal:** Readings within the target healthy range.
+    * **High:** Readings above **180 mg/dL**.
+* **A1C Estimation:** The tracker uses logged data to generate a 7-day average and an estimated A1C percentage.
+---
+### ✨ Additional Features
+
+* **AI Chatbot:** Powered by **OpenAI’s GPT-3.5-turbo**, this assistant provides instant information regarding medications, diet, exercise, and management strategies for both Type 1 and Type 2 diabetes.
+* **User Profile Management:** Users store personal health data—including age, gender, diabetes type, and current medications—to personalize their care.
+* **Ask a Doctor:** A dedicated portal for submitting specific medical questions to professionals and tracking the status of previous inquiries.
 
 ## 📂 Project Architecture
 
@@ -32,8 +54,24 @@ A state-of-the-art, secure, and automated web application designed to empower in
 ├── package.json               # Scripts (start, dev) and project metadata
 └── README.md                  # Project roadmap, setup instructions, and API documentation
 ```
-
+```
+├── Server
+│   └── server1.js        # Express server setup and API endpoints
+├── public
+│   ├── css
+│   │   └── style.css     # Main stylesheet
+│   └── js
+│       ├── chatbot.js    # Logic for the AI chatbot
+│       ├── main.js       # Main javascript for DOM manipulation and navigation
+│       ├── profile.js    # Logic for user profile management
+│       └── tracker.js    # Logic for the blood sugar tracker
+├── index.html            # Main HTML file
+├── node_modules
+├── package-lock.json
+├── package.json
+└── README.md
 ---
+```
 
 ## 🛠 CI/CD Pipelines & DevOps
 
@@ -71,6 +109,15 @@ We prioritize patient data security through multiple layers of defense:
 - **Input Validation**: Hardened server-side validation on `/api/chat` to prevent injection attacks and server crashes.
 
 ---
+## 🌟 Key Features
+
+- `AI Medical Chatbot`🤖: Powered by the Gemini API / GPT-3.5, offering 24/7 answers to queries about diet, insulin management, and lifestyle adjustments.
+- `Intelligent Glucose Tracker`📈: Track morning, afternoon, and night readings with visual indicators (Low, Normal, High).
+- `Patient Profile Management`👤: Store and update critical data including medication lists, diabetes type, and age.
+- `Professional Q&A Interface`👨‍⚕️: Dedicated module for submitting specific medical questions to healthcare providers.
+- `Responsive Dashboard`: A clean, modern UI designed for both mobile and desktop accessibility.
+
+---
 
 ## 🌿 Modular Branching Strategy
 
@@ -91,12 +138,20 @@ The repository follows a partition-based structure to isolate concerns:
    ```bash
    git clone https://github.com/harshit-mehta-lab/diabetes-care-website.git
    ```
-2. **Setup SSL/API Keys**:
-   Add your `GEMINI_API_KEY` to a `.env` file in the `Server/` directory.
 3. **Run with NPM**:
    ```bash
    npm install && npm start
+4. **Setup Environment:
+- Create a `.env file` in the Server/ directory and add your `API` key:
+   ```bash
+   GEMINI_API_KEY=your_key_here
+   PORT=1012
    ```
 
 ---
+## 📸 Explore the Application
+This interactive project showcase provides a look into the visual environment of the application and its architectural framework. Click the image below to visit the main repository!
+
+<img width="2752" height="1497" alt="unnamed (2)" src="https://github.com/user-attachments/assets/8c597c1c-5548-4d43-87a4-b95cba40420a" />
+
 *Developed by Harshit Mehta for the Advanced Diabetes Care Lab.*
