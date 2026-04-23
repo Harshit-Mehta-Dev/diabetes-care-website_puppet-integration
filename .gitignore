@@ -33,3 +33,4 @@ Thumbs.db
 .vscode/
 package-lock.json
 Server/.env
+ngrok.yml

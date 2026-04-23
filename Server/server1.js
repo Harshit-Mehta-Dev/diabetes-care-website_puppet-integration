@@ -150,17 +150,9 @@ if (require.main === module) {
         
         // Automated Ngrok Tunnel Initialization
         if (process.env.NGROK_AUTHTOKEN) {
-            try {
-                await ngrok.authtoken(process.env.NGROK_AUTHTOKEN);
-                const url = await ngrok.connect(PORT);
-                console.log('---------------------------------------------------------');
-                console.log(`🚀 NGROK TUNNEL ACTIVE: ${url}`);
-                console.log('---------------------------------------------------------');
-            } catch (err) {
-                console.error('Error starting Ngrok tunnel:', err.message);
-            }
+             console.log('NOTICE: Ngrok npm wrapper disabled due to environment compatibility. Please run `npm run ngrok` in a separate terminal.');
         } else {
-            console.log('NOTICE: NGROK_AUTHTOKEN not found. Skipping tunnel initialization.');
+             console.log('NOTICE: NGROK_AUTHTOKEN not found. Skipping tunnel initialization.');
         }
     });
 }
