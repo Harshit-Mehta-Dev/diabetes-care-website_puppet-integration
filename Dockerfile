@@ -1,5 +1,8 @@
 # Use a lightweight Node.js 20 image
-FROM node:20-alpine
+FROM node:20-alpine3.20
+
+# SECURITY: Upgrade Alpine OS packages to patch known vulnerabilities
+RUN apk update && apk upgrade --no-cache
 
 # Set the working directory inside the container
 WORKDIR /app
