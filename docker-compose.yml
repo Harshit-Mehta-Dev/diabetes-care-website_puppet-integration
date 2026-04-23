@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: diabetes-care-platform:local
+    ports:
+      - "1012:1012"
+    environment:
+      - NODE_ENV=development
+      - PORT=1012
+    # Mount the .env file if it exists for the Gemini API key
+    # env_file:
+    #   - .env
+    networks:
+      - app-network
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    ports:
+      - "4040:4040"
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    command:
+      - "http"
+      - "app:1012"
+      - "--config"
+      - "/etc/ngrok.yml"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

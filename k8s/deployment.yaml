@@ -22,9 +22,10 @@ spec:
         image: diabetes-care-platform:latest
         ports:
         - containerPort: 1012
+        envFrom:
+        - configMapRef:
+            name: diabetes-care-config
         env:
-        - name: PORT
-          value: "1012"
         - name: GEMINI_API_KEY
           valueFrom:
             secretKeyRef:
