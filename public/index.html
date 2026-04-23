@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar">
+        <aside class="sidebar glass-panel">
             <div class="logo">
                 <i class="fas fa-heartbeat"></i>
                 <span>DiabetesCare</span>
@@ -31,6 +31,15 @@
                     <span class="slider round"></span>
                 </label>
             </div>
+            <div class="color-picker">
+                <p style="font-size: 0.8rem; margin-bottom: 5px; color: var(--text-light); text-align: center;">Theme Colors</p>
+                <div class="color-options">
+                    <div class="color-btn" data-color="#3498db" style="background-color: #3498db;" title="Blue"></div>
+                    <div class="color-btn" data-color="#2ecc71" style="background-color: #2ecc71;" title="Green"></div>
+                    <div class="color-btn" data-color="#9b59b6" style="background-color: #9b59b6;" title="Purple"></div>
+                    <div class="color-btn" data-color="#e67e22" style="background-color: #e67e22;" title="Orange"></div>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Content -->
@@ -39,7 +48,7 @@
             <section id="home" class="page active">
                 <h1>Diabetes care</h1>
                 <h1 id="pro"></h1>
-                <div class="chatbot-container">
+                <div class="chatbot-container glass-panel animated-panel">
                     <div class="chatbot-header">
                         <!--<img src="images/chatbot-avatar.png" alt="Chatbot Avatar" class="chatbot-avatar">-->
                         <div class="chatbot-avatar">
@@ -63,7 +72,7 @@
             <!-- Profile Page -->
             <section id="profile" class="page">
                 <h1>Your Profile</h1>
-                <div class="profile-card">
+                <div class="profile-card glass-panel animated-panel">
                     <form id="profile-form">
                         <div class="form-group">
                             <label for="name">Full Name</label>
@@ -103,7 +112,7 @@
             <section id="tracker" class="page">
                 <h1>Sugar Level Tracker</h1>
                 <div class="tracker-container">
-                    <div class="tracker-form">
+                    <div class="tracker-form glass-panel animated-panel">
                         <h3>Add New Reading</h3>
                         <form id="sugar-form">
                             <div class="form-group">
@@ -122,14 +131,14 @@
                             <button type="submit" class="btn">Add Reading</button>
                         </form>
                     </div>
-                    <div class="tracker-graph">
+                    <div class="tracker-graph glass-panel animated-panel" style="animation-delay: 0.2s;">
                         <h3>Your Sugar Levels</h3>
                         <div class="chart-container">
                             <canvas id="sugar-chart"></canvas>
                         </div>
                     </div>
                 </div>
-                <div class="tracker-history">
+                <div class="tracker-history glass-panel animated-panel" style="animation-delay: 0.4s;">
                     <h3>Recent Readings</h3>
                     <table id="readings-table">
                         <thead>
@@ -151,7 +160,7 @@
             <section id="ask" class="page">
                 <h1>Ask a Doctor</h1>
                 <div class="ask-container">
-                    <div class="ask-form">
+                    <div class="ask-form glass-panel animated-panel">
                         <h3>Submit Your Question</h3>
                         <form id="question-form">
                             <div class="form-group">
@@ -165,7 +174,7 @@
                             <button type="submit" class="btn">Submit Question</button>
                         </form>
                     </div>
-                    <div class="ask-history">
+                    <div class="ask-history glass-panel animated-panel" style="animation-delay: 0.2s;">
                         <h3>Your Previous Questions</h3>
                         <div class="questions-list" id="questions-list">
                     

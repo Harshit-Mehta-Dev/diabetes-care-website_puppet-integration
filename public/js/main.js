@@ -89,4 +89,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 800); // Wait for the animation to finish
         });
     }
+
+    // Color Theme Picker Logic
+    const colorBtns = document.querySelectorAll('.color-btn');
+    const savedColor = localStorage.getItem('themeColor');
+
+    if (savedColor) {
+        document.documentElement.style.setProperty('--primary-color', savedColor);
+        colorBtns.forEach(btn => {
+            if (btn.dataset.color === savedColor) btn.classList.add('active');
+        });
+    }
+
+    colorBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const color = this.dataset.color;
+            document.documentElement.style.setProperty('--primary-color', color);
+            localStorage.setItem('themeColor', color);
+            
+            colorBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
 });
