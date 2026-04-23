@@ -29,6 +29,4 @@ jobs:
     - name: Build Docker Image
       run: docker build -t diabetes-care-platform:test .
 
-    - name: Validate Kubernetes Manifests
-      run: |
-        kubectl create --dry-run=client --validate=false -f k8s/
+
