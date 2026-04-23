@@ -31,6 +31,5 @@ Thumbs.db
 # Project specific
 .agents/
 .vscode/
-package-lock.json
 Server/.env
 ngrok.yml
