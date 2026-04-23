@@ -423,6 +423,12 @@ h1, h2, h3 {
     box-shadow: var(--shadow);
 }
 
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
 .tracker-history {
     background-color: var(--white);
     border-radius: 15px;

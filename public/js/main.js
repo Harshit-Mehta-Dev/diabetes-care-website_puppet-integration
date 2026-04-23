@@ -78,4 +78,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const targetLink = document.querySelector(`.sidebar nav ul li a[href="${initialHash}"]`);
         if (targetLink) targetLink.click();
     }
+
+    // Logo refresh animation
+    const logo = document.querySelector('.logo');
+    if (logo) {
+        logo.addEventListener('click', function() {
+            this.classList.add('refresh-anim');
+            setTimeout(() => {
+                window.location.reload();
+            }, 800); // Wait for the animation to finish
+        });
+    }
 });
