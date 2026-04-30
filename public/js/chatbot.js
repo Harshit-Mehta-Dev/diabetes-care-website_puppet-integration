@@ -34,7 +34,7 @@ function initChatbot() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
         
         try {
-            const response = await fetch('/api/chat/stream', {
+            const response = await fetch('api/chat/stream', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

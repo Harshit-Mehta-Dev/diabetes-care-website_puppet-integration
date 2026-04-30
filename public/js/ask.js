@@ -43,7 +43,7 @@ function initAsk() {
         submitBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/ask-doctor', {
+            const response = await fetch('api/ask-doctor', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
