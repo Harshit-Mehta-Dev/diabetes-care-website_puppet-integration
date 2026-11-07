@@ -3,194 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diabetes Care Companion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <title>Diabetes Care Community Ecosystem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar glass-panel">
-            <div class="logo">
-                <i class="fas fa-heartbeat"></i>
-                <span>DiabetesCare</span>
-            </div>
-            <nav>
-                <ul>
-                    <li class="active"><a href="#home"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#profile"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="#tracker"><i class="fas fa-chart-line"></i> Sugar Tracker</a></li>
-                    <li><a href="#ask"><i class="fas fa-question-circle"></i> Ask Doctor</a></li>
-                </ul>
-            </nav>
-            <div class="theme-toggle">
-                <i class="fas fa-moon"></i>
-                <label class="switch" for="darkModeToggle">
-                    <input type="checkbox" id="darkModeToggle" aria-label="Toggle Dark Mode">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            <div class="color-picker">
-                <p style="font-size: 0.8rem; margin-bottom: 5px; color: var(--text-light); text-align: center;">Theme Colors</p>
-                <div class="color-options">
-                    <div class="color-btn" data-color="#3498db" style="background-color: #3498db;" title="Blue"></div>
-                    <div class="color-btn" data-color="#2ecc71" style="background-color: #2ecc71;" title="Green"></div>
-                    <div class="color-btn" data-color="#9b59b6" style="background-color: #9b59b6;" title="Purple"></div>
-                    <div class="color-btn" data-color="#e67e22" style="background-color: #e67e22;" title="Orange"></div>
+    <header class="glass-header">
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i>
+            <span>DiabetesCare Ecosystem</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#community">Community</a></li>
+                <li><a href="#algorithms">Algorithms</a></li>
+                <li><a href="app.html" class="btn-primary">Launch App</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="badge">Next-Generation Health Tech</div>
+                <h1>Empowering Your Diabetes Management Journey</h1>
+                <p>Move beyond simple tracking. Join a community-driven ecosystem powered by automated clinical decision logic, deep analytics, and real-time triage alerts.</p>
+                <div class="hero-actions">
+                    <a href="app.html" class="btn-primary large">Enter Dashboard</a>
+                    <a href="#features" class="btn-secondary large">Discover More</a>
                 </div>
             </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Home Page with Chatbot -->
-            <section id="home" class="page active">
-                <h1>Diabetes care</h1>
-                <h1 id="pro"></h1>
-                <div class="chatbot-container glass-panel animated-panel">
-                    <div class="chatbot-header">
-                        <!--<img src="images/chatbot-avatar.png" alt="Chatbot Avatar" class="chatbot-avatar">-->
-                        <div class="chatbot-avatar">
-                            <i class="fas fa-heartbeat"></i>
-                            <span>DiabetesCare</span>
-                        </div>
-                        
-                    </div>
-                    <div class="chatbot-messages" id="chatbot-messages">
-                        <div class="chatbot-message bot">
-                            <p>Hello! I'm your Diabetes Care Assistant. How can I help you today?</p>
-                        </div>
-                    </div>
-                    <div class="chatbot-input">
-                        <input type="text" id="user-input" placeholder="Type your question about diabetes...">
-                        <button id="send-button"><i class="fas fa-paper-plane"></i></button>
-                    </div>
+            <div class="hero-graphic">
+                <div class="glass-card floating">
+                    <i class="fas fa-chart-line card-icon"></i>
+                    <h3>Real-time Analytics</h3>
+                    <p>7-day and 14-day TIR (Time-in-Range) parsing.</p>
                 </div>
-            </section>
-
-            <!-- Profile Page -->
-            <section id="profile" class="page">
-                <h1>Your Profile</h1>
-                <div class="profile-card glass-panel animated-panel">
-                    <form id="profile-form">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="age">Age</label>
-                            <input type="number" id="age" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="gender">Gender</label>
-                            <select id="gender" required>
-                                <option value="">Select</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="diabetes-type">Diabetes Type</label>
-                            <select id="diabetes-type" required>
-                                <option value="">Select</option>
-                                <option value="type1">Type 1</option>
-                                <option value="type2">Type 2</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="medications">Current Medications</label>
-                            <textarea id="medications" rows="3"></textarea>
-                        </div>
-                        <button type="submit" class="btn">Save Profile</button>
-                    </form>
+                <div class="glass-card floating delayed">
+                    <i class="fas fa-shield-alt card-icon"></i>
+                    <h3>Clinical Triage</h3>
+                    <p>Immediate low-latency alerts for critical anomalies.</p>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Sugar Tracker Page -->
-            <section id="tracker" class="page">
-                <h1>Sugar Level Tracker</h1>
-                <div class="tracker-container">
-                    <div class="tracker-form glass-panel animated-panel">
-                        <h3>Add New Reading</h3>
-                        <form id="sugar-form">
-                            <div class="form-group">
-                                <label for="reading-time">Time of Day</label>
-                                <select id="reading-time" required>
-                                    <option value="">Select</option>
-                                    <option value="morning">Morning</option>
-                                    <option value="afternoon">Afternoon</option>
-                                    <option value="night">Night</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="sugar-level">Sugar Level (mg/dL)</label>
-                                <input type="number" id="sugar-level" required>
-                            </div>
-                            <button type="submit" class="btn">Add Reading</button>
-                        </form>
-                    </div>
-                    <div class="tracker-graph glass-panel animated-panel" style="animation-delay: 0.2s;">
-                        <h3>Your Sugar Levels</h3>
-                        <div class="chart-container">
-                            <canvas id="sugar-chart"></canvas>
-                        </div>
-                    </div>
+        <section id="features" class="features-section">
+            <h2>Architected for Precision</h2>
+            <div class="feature-grid">
+                <div class="glass-card">
+                    <i class="fas fa-tags feature-icon"></i>
+                    <h3>Contextual Logging</h3>
+                    <p>Log readings with vital tags (Pre-Meal, Fasting, Exercise) for highly accurate algorithm categorization.</p>
                 </div>
-                <div class="tracker-history glass-panel animated-panel" style="animation-delay: 0.4s;">
-                    <h3>Recent Readings</h3>
-                    <table id="readings-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Reading</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        
-                        </tbody>
-                    </table>
+                <div class="glass-card">
+                    <i class="fas fa-robot feature-icon"></i>
+                    <h3>Proactive AI Banners</h3>
+                    <p>Our Context-Aware Stream intercepts dangerous trends before you ask, displaying emergency protocols instantly.</p>
                 </div>
-            </section>
+                <div class="glass-card">
+                    <i class="fas fa-file-medical feature-icon"></i>
+                    <h3>One-Click Export</h3>
+                    <p>Generate elegant clinical summary sheets containing biometric trends and notes for your endocrinologist.</p>
+                </div>
+            </div>
+        </section>
 
-            <!-- Ask Doctor Page -->
-            <section id="ask" class="page">
-                <h1>Ask a Doctor</h1>
-                <div class="ask-container">
-                    <div class="ask-form glass-panel animated-panel">
-                        <h3>Submit Your Question</h3>
-                        <form id="question-form">
-                            <div class="form-group">
-                                <label for="question-title">Subject</label>
-                                <input type="text" id="question-title" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="question-details">Details</label>
-                                <textarea id="question-details" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn">Submit Question</button>
-                        </form>
-                    </div>
-                    <div class="ask-history glass-panel animated-panel" style="animation-delay: 0.2s;">
-                        <h3>Your Previous Questions</h3>
-                        <div class="questions-list" id="questions-list">
-                    
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
+        <section id="community" class="community-section">
+            <div class="glass-panel wide">
+                <h2>A True Support System</h2>
+                <p>Don't manage diabetes alone. Connect through Peer Support Forums, Gamified Accountability Groups, and Expert AMAs with certified educators.</p>
+                <a href="app.html#community" class="btn-primary mt-20">Join the Community</a>
+            </div>
+        </section>
+    </main>
 
-   
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <div class="brand">
+                <i class="fas fa-heartbeat"></i> DiabetesCare
+                <p>Advanced Clinical Triage & Tracking System</p>
+            </div>
+            <div class="links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Provider Portal</a>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Advanced Diabetes Care Lab. All rights reserved.
+        </div>
+    </footer>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/main.js"></script>
-<script src="js/chatbot.js"></script>
-<script src="js/profile.js"></script>
-<script src="js/tracker.js"></script>
-<script src="js/ask.js"></script>
 </html>

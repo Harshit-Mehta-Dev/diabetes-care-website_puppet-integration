@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Care Ecosystem Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-panel">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>DiabetesCare</span>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#home"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                    <li><a href="#tracker"><i class="fas fa-chart-line"></i> <span>Sugar Tracker</span></a></li>
+                    <li><a href="#community"><i class="fas fa-users"></i> <span>Community</span></a></li>
+                    <li><a href="#ask"><i class="fas fa-user-md"></i> <span>Provider Portal</span></a></li>
+                    <li><a href="#profile"><i class="fas fa-user-cog"></i> <span>Profile</span></a></li>
+                    <li><a href="index.html" style="margin-top: 40px; color: var(--danger-color);"><i class="fas fa-sign-out-alt"></i> <span>Exit</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Dashboard (Context-Aware Stream) -->
+            <section id="home" class="page active">
+                <h1>Command Center</h1>
+                
+                <div class="chatbot-container glass-panel">
+                    <div class="chatbot-header">
+                        <div class="chatbot-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem; color: #fff;">Context-Aware Assistant</h3>
+                            <span style="font-size: 0.8rem; color: var(--success-color);">● Online & Monitoring</span>
+                        </div>
+                    </div>
+                    <div class="chatbot-messages" id="chatbot-messages">
+                        <div class="chatbot-message bot">
+                            Welcome back. I am continuously monitoring your physiological logs. How can I assist you today?
+                        </div>
+                    </div>
+                    <div class="chatbot-input">
+                        <input type="text" id="user-input" placeholder="Ask about trends, diet, or emergency protocols...">
+                        <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sugar Tracker Page -->
+            <section id="tracker" class="page">
+                <h1>Advanced Analytics Engine</h1>
+                <div class="tracker-container">
+                    <div class="tracker-form glass-panel">
+                        <h3>Log Physiological Data</h3>
+                        <form id="sugar-form">
+                            <div class="form-group">
+                                <label for="sugar-level">Glucose Level (mg/dL)</label>
+                                <input type="number" id="sugar-level" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="context-tag">Context Tag</label>
+                                <select id="context-tag" required>
+                                    <option value="">Select Context...</option>
+                                    <option value="Fasting">Fasting</option>
+                                    <option value="Pre-Meal">Pre-Meal</option>
+                                    <option value="Post-Meal">Post-Meal (2h)</option>
+                                    <option value="Exercise">During/After Exercise</option>
+                                    <option value="Bedtime">Bedtime</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Submit Reading</button>
+                        </form>
+                    </div>
+                    
+                    <div class="tracker-graph glass-panel">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                            <h3 style="margin: 0;">Time-in-Range (TIR) Trends</h3>
+                            <button class="btn" id="export-btn" style="padding: 6px 15px; font-size: 0.9rem;">Export PDF</button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="sugar-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tracker-history glass-panel">
+                    <h3>Recent Logs</h3>
+                    <table id="readings-table">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Context</th>
+                                <th>Reading (mg/dL)</th>
+                                <th>Status Triage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Javascript populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Community Shell -->
+            <section id="community" class="page">
+                <h1>Community Ecosystem</h1>
+                <div class="glass-panel" style="padding: 40px; text-align: center;">
+                    <i class="fas fa-users" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+                    <h2>Peer Support & Accountability</h2>
+                    <p style="max-width: 600px; margin: 0 auto; color: var(--text-light);">
+                        Connect with verified peers. Participate in Gamified Accountability Groups to maintain your Time-in-Range targets.
+                    </p>
+                    <button class="btn" style="margin-top: 30px;">Join a Cohort</button>
+                </div>
+            </section>
+
+            <!-- Provider Portal (Ask Doctor) -->
+            <section id="ask" class="page">
+                <h1>Clinical Triage Portal</h1>
+                <div class="tracker-container">
+                    <div class="tracker-form glass-panel">
+                        <h3>Submit Clinical Note</h3>
+                        <form id="question-form">
+                            <div class="form-group">
+                                <label for="priority">Triage Priority</label>
+                                <select id="priority" required>
+                                    <option value="Routine">Routine Inquiry</option>
+                                    <option value="Urgent">Urgent Review</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="question-title">Subject</label>
+                                <input type="text" id="question-title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="question-details">Clinical Details / Symptoms</label>
+                                <textarea id="question-details" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Transmit Securely</button>
+                        </form>
+                    </div>
+                    <div class="tracker-history glass-panel">
+                        <h3>Prior Transmissions</h3>
+                        <div id="questions-list">
+                            <p style="color: var(--text-light); font-style: italic;">No records found.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Page -->
+            <section id="profile" class="page">
+                <h1>Medical Metadata</h1>
+                <div class="profile-card glass-panel">
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="name">Patient Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="diabetes-type">Diagnostic Category</label>
+                            <select id="diabetes-type" required>
+                                <option value="">Select</option>
+                                <option value="type1">Type 1</option>
+                                <option value="type2">Type 2</option>
+                                <option value="gestational">Gestational</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="medications">Active Regimens (Insulin/Oral)</label>
+                            <textarea id="medications" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Update Baseline</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/tracker.js"></script>
+    <script src="js/ask.js"></script>
+</body>
+</html>

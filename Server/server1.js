@@ -127,6 +127,100 @@ app.post('/api/ask-doctor', async (req, res) => {
     }
 });
 
+// Mock Database for Phase 2 Implementation
+const physiologicalLogs = [];
+
+// Advanced Triage Engine: Log Glucose
+app.post('/api/v1/logs/glucose', (req, res) => {
+    const { userId, glucoseValue, timestamp, contextTags, notes } = req.body;
+    
+    if (!glucoseValue) return res.status(400).json({ error: 'Glucose value is required.' });
+
+    const logEntry = {
+        id: Date.now().toString(),
+        userId: userId || 'anonymous',
+        glucoseValue: Number(glucoseValue),
+        timestamp: timestamp || new Date().toISOString(),
+        contextTags: contextTags || [],
+        notes: notes || ''
+    };
+    
+    physiologicalLogs.push(logEntry);
+
+    // Triage Logic
+    let triageStatus = 'Normal';
+    let alertMessage = null;
+    let triageLevel = 'success'; // success, warning, danger
+
+    if (logEntry.glucoseValue < 70) {
+        triageStatus = 'Hypoglycemia';
+        alertMessage = 'CRITICAL: Severe Hypoglycemia detected. Please apply the 15-15 rule immediately (consume 15g of fast-acting carbs and check again in 15 mins).';
+        triageLevel = 'danger';
+    } else if (logEntry.glucoseValue > 250) {
+        triageStatus = 'Severe Hyperglycemia';
+        alertMessage = 'WARNING: Severe Hyperglycemia. Please check for ketones and consider administering correction insulin if prescribed.';
+        triageLevel = 'danger';
+    } else if (logEntry.glucoseValue > 180 && !logEntry.contextTags.includes('Post-Meal')) {
+        triageStatus = 'High (Fasting/Random)';
+        alertMessage = 'Notice: Elevated glucose levels detected outside of post-meal window.';
+        triageLevel = 'warning';
+    } else if (logEntry.glucoseValue > 180 && logEntry.contextTags.includes('Post-Meal')) {
+        triageStatus = 'Elevated (Post-Meal)';
+        triageLevel = 'warning';
+    }
+
+    logEntry.triageStatus = triageStatus;
+    logEntry.triageLevel = triageLevel;
+
+    res.status(201).json({
+        success: true,
+        data: logEntry,
+        alert: alertMessage
+    });
+});
+
+// Trend Analysis Engine: Time-in-Range (TIR)
+app.get('/api/v1/logs/analytics/tir', (req, res) => {
+    const window = req.query.window || '7d'; // Mocked window
+    
+    // Calculate TIR from mock db
+    const totalReadings = physiologicalLogs.length;
+    if (totalReadings === 0) {
+        return res.json({ timeInRangePercentage: 0, timeBelowRange: 0, timeAboveRange: 0, actionableInsights: ["No data available. Please log readings."] });
+    }
+
+    let inRange = 0, below = 0, above = 0;
+    physiologicalLogs.forEach(log => {
+        if (log.glucoseValue < 70) below++;
+        else if (log.glucoseValue <= 180) inRange++;
+        else above++;
+    });
+
+    res.json({
+        timeInRangePercentage: Math.round((inRange / totalReadings) * 100),
+        timeBelowRange: Math.round((below / totalReadings) * 100),
+        timeAboveRange: Math.round((above / totalReadings) * 100),
+        actionableInsights: [
+            above > below ? "You have a trend of elevated readings. Consider adjusting carbohydrate intake." : "Your levels are well managed.",
+            "Maintain consistent logging for better trend analysis."
+        ],
+        logs: physiologicalLogs // Send recent logs to populate UI
+    });
+});
+
+// Mock Export endpoint
+app.get('/api/v1/reports/export', (req, res) => {
+    res.setHeader('Content-disposition', 'attachment; filename=clinical_report.csv');
+    res.set('Content-Type', 'text/csv');
+    
+    let csv = 'Timestamp,Glucose Value (mg/dL),Context,Triage Status,Notes\n';
+    physiologicalLogs.forEach(log => {
+        csv += `${log.timestamp},${log.glucoseValue},"${log.contextTags.join(', ')}",${log.triageStatus},"${log.notes}"\n`;
+    });
+    
+    res.status(200).send(csv);
+});
+
 // Start server
 if (require.main === module) {
     app.listen(PORT, () => {
