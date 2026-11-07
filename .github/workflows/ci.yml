@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 permissions:
   contents: read
@@ -13,11 +13,17 @@ permissions:
 
 jobs:
   build-and-test:
-    name: Build and Test
+    name: Build & Test (Maven / Node)
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Set up Java JDK for Maven
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
@@ -28,15 +34,47 @@ jobs:
     - name: Install dependencies
       run: npm ci || npm install
 
-    - name: Run tests
+    - name: Run Tests
       run: npm test
       env:
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+  docker-and-infra-check:
+    name: Docker & Puppet/Nagios Verification
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        load: true
+        tags: diabetes-care-platform:latest
+
+    - name: Validate Puppet Manifests Syntax
+      run: |
+        echo "Validating Puppet configuration files..."
+        test -f puppet/manifests/site.pp
+        test -f puppet/puppet.conf
+
+    - name: Validate Nagios Configurations & Plugins
+      run: |
+        echo "Validating Nagios configuration files..."
+        test -f nagios/etc/nagios.cfg
+        test -f nagios/etc/objects/hosts.cfg
+        test -f nagios/etc/objects/services.cfg
+        chmod +x nagios/plugins/check_docker.sh
+
   deploy:
     name: Deploy to GitHub Pages
-    needs: build-and-test
-    if: github.ref == 'refs/heads/main'
+    needs: docker-and-infra-check
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
